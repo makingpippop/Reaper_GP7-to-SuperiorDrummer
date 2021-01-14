@@ -1,8 +1,8 @@
 # REAPER | Custom script 
-## GUTAR PRO Drums to Superior Drummer in REAPER
+## GUTAR PRO Drums to Superior Drummer in REAPER <br /><br />
 
-### Imports the MIDI of a drum track from Guitar Pro 6 [GP6] and create a template REAPER project for working with Superior drummer 3 [SD3]  <br /><br /><br />
 
+### Imports the MIDI of a drum track from Guitar Pro 6 [GP6] and create a template REAPER project for working with Superior drummer 3 [SD3]  <br />
 
 #### Yeah, but what does it really do?
 Using an exported ".mid" from Guitar pro.
