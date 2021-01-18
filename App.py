@@ -1,8 +1,10 @@
 import reapy
 project = reapy.Project()
 
-instrument_groups =     {
-                          "35" : 'Snare'
+instrument_groups =     {  
+                            "groups"    : ['Snare','Bass-drum', 'Hi-hat', 'Toms', 'Crash', 'China', 'Ride'],
+                            "35"        : {'group' : 'Snare', 'SD3-note' : 35},
+                            '34'        : {'group' : 'Snare', 'SD3-note' : 34}
                         }
 
 midi_item = project.import_media("D:/Documents/DAW/Reaper/API/Reapy/04_Call-of-the-Void_Drums_GP6-v2.mid")
