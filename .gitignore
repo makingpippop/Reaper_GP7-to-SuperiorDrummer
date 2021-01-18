@@ -41,6 +41,6 @@ rpp/
 .rpp
 .rpp-bak
 
-#Python
-node-modules/
+#Dage
 .venv/
+.workspace/
