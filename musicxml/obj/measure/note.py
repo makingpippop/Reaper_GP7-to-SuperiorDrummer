@@ -1,7 +1,9 @@
 class Note(object):
-    def __init__(self, id):
+    def __init__(self, id, inst_obj):
         #chronological id in the measure
         self._id        = id
+        #instrument making the note
+        self._inst      = inst_obj
         #choronological id in voice layer
         self.voice_id   = None
         #position in the measure (0 -> 1) based on a subdivision of 64
@@ -23,3 +25,7 @@ class Note(object):
     @property
     def id(self):
         return self._id
+        
+    @property
+    def instrument(self):
+        return self._inst
