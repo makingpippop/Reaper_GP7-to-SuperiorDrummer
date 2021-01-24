@@ -10,7 +10,10 @@ class Instrument(object):
         self._measures      = []
     
 
-    def add_measure(self, measure_obj):
+    def link_beat(self, beat_obj):
+        pass
+
+    def link_measure(self, measure_obj):
         pass
     
     @property

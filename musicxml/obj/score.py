@@ -13,6 +13,7 @@ class Score(object):
 		self._part_list 	= []
 		self._parts = {}
 		
+		self._measures = []
 	def load_parts(self):
 		xml_part_list = self.score_xml.find("part-list")
 		#PART LIST ------------------------------------------------------------------------------
@@ -52,31 +53,35 @@ class Score(object):
 			#get time signature, use signature from last measure if there's no info provided
 			signature = measure.load_measure_signature(m)
 			signature = last_signature if signature == None else signature
-			#get measure smallest subdivision and, use subdivision from last measure if no info is provided
-			subdivision = measure.load_measure_division(m)
-			subdivision = last_subdivision if subdivision == None else subdivision
 			#get bpm, use bpm from last measure if no info is provided
 			bpm = measure.load_measure_bpm(m)
 			bpm = last_bpm if bpm == None else bpm
 			#apply to measure
 			measure.bpm 		= bpm
 			measure.signature 	= signature
-			measure.subdivision = subdivision
+			#measure.subdivision = subdivision
+			self._measures.append(measure)
 			#save for next measures
 			last_bpm 			= bpm
 			last_signature 		= signature
-			last_subdivision 	= subdivision
 
 			#print(f'MEASURE #{measure.id} | {measure.signature[0]}/{measure.signature[1]} | {measure.bpm} bpm | 1/{measure.subdivision}')
 			#add measure to parts
 			for p in self._parts:
-				p.add_measure(measure)
-		
+				self._parts[p].link_measure(measure)
+
+	def load_beats(self):
+		for p in self._parts:
+			self._parts[p].load_beats()
 
 
 
-
-
+	@property
+	def parts(self):
+		return self._parts
+	@property
+	def measures(self):
+		return self._measures
 
 
 	# def add_measure(self, id, subdivision, bpm, signature):

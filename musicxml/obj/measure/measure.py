@@ -1,5 +1,5 @@
 from sys import settrace
-from .note import Note
+from .beats import *
 
 class Measure(object):
 	def __init__(self, id, m_xml):
@@ -7,12 +7,27 @@ class Measure(object):
 		self._id            = id
 		self._bpm           = None
 		self._signature     = None
-		self._subdivision   = None
-		self._notes         = []
+		self._beats 		= {}
+		self._notes         = {}
+		self._beats 		= {}
 		self._instruments   = []
+	
+	def __str__(self):
+		return f'obj.Measure #{self._id} | {"/".join(self._signature)}'
+	def __repr__(self):
+		return f'obj.Measure #{self._id} | {"/".join(self._signature)}'
 
-	def add_note(self, part, inst):
-		return
+	def add_beat(self, id, part_id, inst):
+		beat_args = (id, part_id, inst)
+		beat = Rest(*beat_args) if inst == None else Note(*beat_args)
+
+		if id in self._beats:
+			self._beats[id].append(beat)
+		else:
+			self._beats[id] = [beat]
+
+		#print(f'NEW BEAT ({beat.type}) #{beat.id} from instrument : {beat.instrument}')
+		return beat
 	
 	def add_instrument(self,inst_obj):
 		pass
@@ -68,12 +83,15 @@ class Measure(object):
 		self._signature = value
 
 	@property
-	def subdivision(self):
-		return self._subdivision
-	@subdivision.setter 
-	def subdivision (self, value):
-		self._subdivision = value
-
-	@property
 	def instruments(self):
 		return self._instruments
+	
+	@property
+	def beats(self):
+		return self._beats
+	
+	#returns a list of parts that have notes in this measure
+	@property
+	def parts(self):
+		return None
+	

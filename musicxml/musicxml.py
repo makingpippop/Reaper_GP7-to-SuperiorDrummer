@@ -48,7 +48,7 @@ class MusicXML():
 		self._score = Score(score_name, self.data)
 		self._score.load_parts()
 		self._score.load_notations()
-
+		self._score.load_beats()
 		return self._score
 		"""
 		#NOTES ------------------------------------------------------------------------
