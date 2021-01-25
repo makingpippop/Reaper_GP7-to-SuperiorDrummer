@@ -15,7 +15,6 @@ class Measure(object):
 	def __str__(self):
 		return f'<obj.Measure> #{self._id} | {"/".join(map(str,self._signature))}'
 	def __repr__(self):
-		print('ICI', self._signature, self._id)
 		return f'<obj.Measure> #{self._id} | {"/".join(map(str,self._signature))}'
 
 	def add_beat(self, id, part_id, inst):

@@ -9,6 +9,10 @@ class Instrument(object):
         self._volume        = 80
         self._measures      = []
     
+    def __str__(self) -> str:
+        return f'<obj.Part.Instrument> {self._name} ({self._part_id}:{self._id})'
+    def __repr__(self) -> str:
+        return f'<obj.Part.Instrument> {self._name} ({self._part_id}:{self._id})'
 
     def link_beat(self, beat_obj):
         pass
