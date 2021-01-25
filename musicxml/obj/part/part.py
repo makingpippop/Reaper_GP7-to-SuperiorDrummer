@@ -96,6 +96,9 @@ class Part():
 			n_dynamic = self.last_dynamic if n_dynamic == None else n_dynamic
 			self.last_dynamic = n_dynamic
 			beat_obj.dynamic = n_dynamic
+			#step and octave
+			n_step 		= b_xml.find('unpitched/display-step').text
+			n_octave 	= b_xml.find('unpitched/display-octave').text
 			
 		#REST
 

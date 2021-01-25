@@ -27,6 +27,21 @@ class Note(Beat):
 			dynamic = next(dynamic_attr).tag
 		return dynamic
 
+	
+	@property
+	def step(self):
+		return self._step
+	@step.setter
+	def step(self, value):
+		self._step = value
+
+	@property
+	def octave(self):
+		return self._octave
+	@octave.setter
+	def octave(self, value):
+		self._octave = value
+
 	@property
 	def dynamic(self):
 		return self._dynamic
