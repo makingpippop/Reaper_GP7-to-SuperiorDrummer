@@ -931,7 +931,7 @@ Artists1</credit-words>
     <voice>1</voice>
     <type>quarter</type>
     <stem>down</stem>
-    <notehead>normal</notehead>
+    <notehead parentheses="yes">normal</notehead>
     <notations>
      <dynamics>
       <mf/>
@@ -953,9 +953,9 @@ Artists1</credit-words>
      <dynamics>
       <mf/>
      </dynamics>
-     <ornaments>
-      <tremolo>1</tremolo>
-     </ornaments>
+     <articulations>
+      <accent/>
+     </articulations>
     </notations>
    </note>
    <note>
@@ -973,9 +973,9 @@ Artists1</credit-words>
      <dynamics>
       <mf/>
      </dynamics>
-     <ornaments>
-      <tremolo>2</tremolo>
-     </ornaments>
+     <articulations>
+      <strong-accent/>
+     </articulations>
     </notations>
    </note>
    <note>
@@ -993,104 +993,29 @@ Artists1</credit-words>
      <dynamics>
       <mf/>
      </dynamics>
-     <ornaments>
-      <tremolo>3</tremolo>
-     </ornaments>
+     <articulations>
+      <staccato/>
+     </articulations>
     </notations>
    </note>
   </measure>
   <measure number="2">
-   <attributes>
-    <divisions>12</divisions>
-   </attributes>
    <note>
     <unpitched>
      <display-step>C</display-step>
      <display-octave>5</display-octave>
     </unpitched>
-    <duration>6</duration>
-    <instrument id="P1-I1"/>
-    <voice>1</voice>
-    <type>eighth</type>
-    <stem>down</stem>
-    <notehead>normal</notehead>
-    <beam number="1">begin</beam>
-    <notations>
-     <ornaments>
-      <tremolo>2</tremolo>
-     </ornaments>
-    </notations>
-   </note>
-   <note>
-    <unpitched>
-     <display-step>C</display-step>
-     <display-octave>5</display-octave>
-    </unpitched>
-    <duration>6</duration>
-    <instrument id="P1-I1"/>
-    <voice>1</voice>
-    <type>eighth</type>
-    <stem>down</stem>
-    <notehead>normal</notehead>
-    <beam number="1">end</beam>
-    <notations>
-     <ornaments>
-      <tremolo>3</tremolo>
-     </ornaments>
-    </notations>
-   </note>
-   <note>
-    <unpitched>
-     <display-step>C</display-step>
-     <display-octave>5</display-octave>
-    </unpitched>
-    <duration>3</duration>
-    <instrument id="P1-I1"/>
-    <voice>1</voice>
-    <type>16th</type>
-    <stem>down</stem>
-    <notehead>normal</notehead>
-    <beam number="1">begin</beam>
-   </note>
-   <note>
-    <unpitched>
-     <display-step>C</display-step>
-     <display-octave>5</display-octave>
-    </unpitched>
-    <duration>9</duration>
-    <instrument id="P1-I1"/>
-    <voice>1</voice>
-    <type>eighth</type>
-    <dot/>
-    <stem>down</stem>
-    <notehead>normal</notehead>
-    <beam number="1">end</beam>
-    <notations>
-     <ornaments>
-      <tremolo>1</tremolo>
-     </ornaments>
-    </notations>
-   </note>
-   <note>
-    <unpitched>
-     <display-step>C</display-step>
-     <display-octave>5</display-octave>
-    </unpitched>
-    <duration>8</duration>
+    <duration>1</duration>
     <instrument id="P1-I1"/>
     <voice>1</voice>
     <type>quarter</type>
-    <time-modification>
-     <actual-notes>3</actual-notes>
-     <normal-notes>2</normal-notes>
-    </time-modification>
     <stem>down</stem>
     <notehead>normal</notehead>
     <notations>
-     <tuplet type="start" number="1" bracket="yes" placement="below"/>
-     <ornaments>
-      <tremolo>2</tremolo>
-     </ornaments>
+     <articulations>
+      <staccato/>
+      <accent/>
+     </articulations>
     </notations>
    </note>
    <note>
@@ -1098,48 +1023,32 @@ Artists1</credit-words>
      <display-step>C</display-step>
      <display-octave>5</display-octave>
     </unpitched>
-    <duration>8</duration>
+    <duration>1</duration>
     <instrument id="P1-I1"/>
     <voice>1</voice>
     <type>quarter</type>
-    <time-modification>
-     <actual-notes>3</actual-notes>
-     <normal-notes>2</normal-notes>
-    </time-modification>
     <stem>down</stem>
     <notehead>normal</notehead>
     <notations>
-     <ornaments>
-      <tremolo>3</tremolo>
-     </ornaments>
+     <articulations>
+      <staccato/>
+      <accent/>
+     </articulations>
     </notations>
    </note>
    <note>
-    <unpitched>
-     <display-step>C</display-step>
-     <display-octave>5</display-octave>
-    </unpitched>
-    <duration>8</duration>
-    <instrument id="P1-I1"/>
+    <rest/>
+    <duration>1</duration>
     <voice>1</voice>
     <type>quarter</type>
-    <time-modification>
-     <actual-notes>3</actual-notes>
-     <normal-notes>2</normal-notes>
-    </time-modification>
-    <stem>down</stem>
-    <notehead>normal</notehead>
-    <notations>
-     <ornaments>
-      <tremolo>1</tremolo>
-     </ornaments>
-    </notations>
+   </note>
+   <note>
+    <rest/>
+    <duration>1</duration>
+    <voice>1</voice>
+    <type>quarter</type>
    </note>
   </measure>
-  <measure number="3">
-   <attributes>
-    <divisions>1</divisions>
-   </attributes>
-  </measure>
+  <measure number="3"/>
  </part>
 </score-partwise>

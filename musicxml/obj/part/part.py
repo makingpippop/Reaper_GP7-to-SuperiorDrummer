@@ -1,5 +1,6 @@
 from .instrument import Instrument
 
+
 class Part():
 	def __init__(self, name, id, part_xml):
 		self.part_xml 			= part_xml
@@ -12,6 +13,11 @@ class Part():
 		self.last_dynamic = None
 		print(f'New part : {self.name}')
 
+	def __str__(self) -> str:
+		return f'<obj.Part> ({self._id}:{self._name})'
+	def __repr__(self) -> str:
+		return f'<obj.Part> ({self._id}:{self._name})'
+		
 	def load_instruments(self):
 		#loop <part-list><score-instrument> for the list of instrument on this track
 		for p_inst in self.part_xml.findall('score-instrument'):
@@ -55,7 +61,7 @@ class Part():
 			#load notes
 			note_counter 	= 0
 			cur_voice 		= 1
-			print(f'MEASURE #{m_id} | Division : {m_division}')
+			#print(f'MEASURE #{m_id} | Division : {m_division}')
 			for n_xml in m_xml.findall('note'):
 				inst 		= n_xml.find('instrument')
 				inst_obj 	= None if inst == None else self._instruments[inst.get('id')]
@@ -68,6 +74,7 @@ class Part():
 					n_voice 		= cur_voice
 				#add a beat to the measure
 				beat_obj = m_obj.add_beat(note_counter, self.id, inst_obj)
+				beat_obj.set_beat_xml(n_xml)
 				self.load_beat(m_division, n_xml, beat_obj)
 
 				
@@ -77,28 +84,36 @@ class Part():
 
 	def load_beat(self, m_division, b_xml, beat_obj):
 		#voice (layer)
-		beat_obj.voice 			= int(b_xml.find('voice').text)
+		beat_obj.voice 			= beat_obj.load_voice()
 		#duration
-		xml_note_duration 		= int(b_xml.find('duration').text)
-		note_duration 			= xml_note_duration / m_division
+		xml_beat_duration 		= beat_obj.load_duration()
+		beat_duration 			= xml_beat_duration / m_division
+		beat_obj.duration 		= beat_duration
 		#dot
-		dot_tag 				= b_xml.findall('dot')
-		beat_obj.dotted 		= 0 if dot_tag == None else len(dot_tag)
+		beat_obj.dotted 		= beat_obj.load_dotted()
 		#tuplet
-		tuplet_tag 				= b_xml.find('notations/tuplet')
-		beat_obj.tuplet 		= False if tuplet_tag == None else True
-		beat_obj.tuplet_ratio 	= None if tuplet_tag == None else [int(b_xml.find("time-modification/actual-notes").text), int(b_xml.find("time-modification/normal-notes").text)]
+		beat_obj.tuplet 		= beat_obj.load_tuplet()
+		beat_obj.tuplet_ratio 	= beat_obj.load_tuplet_ratio()
 
 		#NOTES
 		if beat_obj.type == "Note":
 			#dynamic
-			n_dynamic = beat_obj.get_note_dynamic(b_xml)
+			n_dynamic = beat_obj.load_note_dynamic()
 			n_dynamic = self.last_dynamic if n_dynamic == None else n_dynamic
 			self.last_dynamic = n_dynamic
 			beat_obj.dynamic = n_dynamic
 			#step and octave
-			n_step 		= b_xml.find('unpitched/display-step').text
-			n_octave 	= b_xml.find('unpitched/display-octave').text
+			beat_obj.step	= beat_obj.load_step()
+			beat_obj.octave	= beat_obj.load_octave()
+			#grace
+			grace_slash 			= beat_obj.load_grace()
+			is_grace 				= True if grace_slash is not None else False
+			beat_obj.grace_slash 	= grace_slash
+			beat_obj.grace 			= is_grace
+			#articulation
+			beat_obj.load_articulations()
+			#tremolo
+			beat_obj.tremolo = beat_obj.load_tremolo()
 			
 		#REST
 

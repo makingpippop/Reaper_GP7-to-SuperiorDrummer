@@ -6,6 +6,8 @@ class Beat(object):
         #chronological id in the measure (for the specified instrument)
         self.type       = self.__class__.__name__
         self._id        = id
+        #
+        self.b_xml      = None
         #part containing this note
         self._part      = part_id
         #instrument making the note
@@ -18,16 +20,16 @@ class Beat(object):
         #duration, in relation a the measure length (0.0 -> 4.0)
         self._duration  = None
         # self._duration_name    = None
-        # self.duration_name_to_ratio = {  
-        #                             'whole'     : 4,
-        #                             'half'      : 2,
-        #                             'quarter'   : 1,
-        #                             'dotted-eight' : 0.75,
-        #                             'eighth'    : 1/2,
-        #                             '16th'      : 1/16,
-        #                             '32nd'      : 1/32,
-        #                             '64th'      : 1/64
-        #                          }
+        self.type_to_duration = {  
+                                    'whole'           : 4,
+                                    'half'            : 2,
+                                    'quarter'         : 1,
+                                    'dotted-eight'    : 1/1.33333,    #(0.75)
+                                    'eighth'          : 1/2,          #(0.5)      
+                                    '16th'            : 1/4,          #(0.25)
+                                    '32nd'            : 1/8,          #(0.125)
+                                    '64th'            : 1/16          #(0.0625)
+                                 }
         #is this a tuplet (triplet, quintuplet, sextuplet ...)
         self._tuplet            = False
         #ratio of note / beat (a triplet is 3:2, quintuplet 5:4)
@@ -38,9 +40,48 @@ class Beat(object):
         self._text = None 
     
     def __str__(self) -> str:
-        return f'obj.{self.type} ({self._part}:{self._duration})'
+        return f'<obj.{self.type}> ({self._part}:{self._duration})'
     def __repr__(self) -> str:
-        return f'obj.{self.type} ({self._part}:{self._duration})'
+        return f'<obj.{self.type}> ({self._part}:{self._duration})'
+
+    def set_beat_xml(self, b_xml):
+        self.b_xml = b_xml
+
+    def load_duration(self):
+        duration = None
+        dur_attr = self.b_xml.find('duration')
+        if dur_attr is not None:
+            duration = int(dur_attr.text)
+        #sometimes <duration> doesn't exist, it's the case for grace note
+        #if it's the case use the <note><type>
+        else:
+            b_type_attr = self.b_xml.find('type').text
+            duration    = self.type_to_duration[b_type_attr]
+
+        return duration
+
+    def load_voice(self):
+        return int(self.b_xml.find('voice').text)
+
+    def load_dotted(self):
+        dot_tag = self.b_xml.findall('dot')
+        return 0 if dot_tag == None else len(dot_tag)
+
+    def load_tuplet(self):
+        tuplet_tag 	= self.b_xml.find('notations/tuplet')
+        return False if tuplet_tag == None else True
+
+    def load_tuplet_ratio(self):
+        tuplet_ratio = None
+        tuplet_tag 	    = self.b_xml.find('notations/tuplet')
+        if tuplet_tag is not None:
+            tuplet_dur      = int(self.b_xml.find("time-modification/normal-notes").text)
+            tuplet_num_note = int(self.b_xml.find("time-modification/actual-notes").text)
+            tuplet_ratio    = [tuplet_num_note, tuplet_dur]
+        return tuplet_ratio
+    # def load_(self, b_xml):
+    #     return
+
 
     # def _set_duration(self, duration_value):
     #     #if we set the duration with a name

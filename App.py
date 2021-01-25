@@ -4,9 +4,9 @@ import musicxml
 
 
 def import_drums():
-	musicXML 	= MusicXML("GP/_exports/Rythmic-values.xml")
+	musicXML 	= MusicXML("GP/_exports/All-drums-notation_GP7_v5.xml")
 	score 		= musicXML.load_score()
-	
+	print(score.parts["P1"].measures[31].beats)
 	
 	return
 	project = reapy.Project()

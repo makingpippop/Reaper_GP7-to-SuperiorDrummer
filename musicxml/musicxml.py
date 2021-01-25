@@ -50,40 +50,7 @@ class MusicXML():
 		self._score.load_notations()
 		self._score.load_beats()
 		return self._score
-		"""
-		#NOTES ------------------------------------------------------------------------
-		#depth layers of guitar pro
-		old_voice 	= 1
-		old_dynamic = ''
-		note_inc 	= 0
-		for n in m.findall('note'):
-			voice 			= int(n.find('voice').text)
-			inst 			= n.find("instrument")
-			inst_id 		= None
-			rest 			= False
-			articulation 	= None
-			dynamic 		= 'pppp'
-			ghost 			= False
-			tremolo 		= False
-			grace 			= False
-			grace_type 		= None
-			
-			if inst is not None :
-				inst_id = inst.get("id")
-			else:
-				rest = True if n.find("rest") is not None else False
-			
-			duration 	= n.find("duration")
-			
-			if voice != old_voice:
-				old_voice = voice
-				note_inc = 0
-			
-			#ADD NOTE HERE
-			#part.measures[m_id-1].add_note()
-			#n_duration 	= 
-		"""
-	
+
 	
 	@property
 	def parts(self):
