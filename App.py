@@ -1,7 +1,7 @@
 import reapy
 from reapy import prevent_ui_refresh
 from musicxml import MusicXML
-
+from helpers import get_nested_tracks, get_track_by_CC_pitch, combine_items_from_track_group, glue_all_items_on_track
 
 def import_drums():
 	musicXML 	= MusicXML("GP/_exports/All-drums-notation.xml")
@@ -65,65 +65,32 @@ def import_drums():
 	project.perform_action(40920)
 
 	#get child tracks ----------------------------------------------------------
-	n_track_left    = project.n_tracks - midi_track.index
-	last_track_id   = n_track_left+midi_track.index
-	new_track_id    = midi_track.index
-
-	child_tracks    = []
-	for track_id in range(last_track_id, new_track_id+1, -1):
-		track = project.tracks[track_id-1]
-		if new_track_id == track.parent_track.index :
-			child_tracks.insert(0,track)
+	child_tracks = get_nested_tracks(project, midi_track)
+	
 	#---------------------------------------------------------------------------
 	#COMBINE MIDI FILES
 	with reapy.inside_reaper():
 		project.begin_undo_block()
-		group_tracks = []
-		track_to_delete = []
+		main_tracks = []
+		ununsed_tracks = []
 		for g in instrument_groups:
 			g_name 			= g
 			g_pitchs 		= instrument_groups[g]
-			reaper_tracks 	= get_group_tracks(g_pitchs, child_tracks)
-			group_tracks.append(reaper_tracks[-1])
-			track_to_delete += combine_group_tracks(g_name, reaper_tracks)
+			group_tracks 	= get_track_by_CC_pitch(g_pitchs, child_tracks)
+			if len(group_tracks):
+				#keep the last track (items from other tracks will be moved to this one)
+				main_tracks.append(group_tracks[-1])
+				ununsed_tracks += combine_items_from_track_group(g_name, group_tracks)
 		
-		for t in track_to_delete:
+		for t in ununsed_tracks:
 			t.delete()
 		project.end_undo_block()
 
 		#glue items
-		for t in group_tracks:
-			for i,item in enumerate(t.items):
-				make_unique = i == 0
-				project.select_item(item, makeUnique=make_unique)
-			#glue items
-			project.perform_action(41588)
+		for t in main_tracks:
+			glue_all_items_on_track(project, t)
 
-@prevent_ui_refresh()
-def get_group_tracks(pitch_list, reaper_tracks) -> list:
-	pitch_tracks = []
-	for t in reaper_tracks:
-		if not len(t.items):
-			continue
-		CC_notes = t.items[0].takes[0].notes
-		if not len(CC_notes):
-			continue
-		CC_note = t.items[0].takes[0].notes[0].pitch
-		if CC_note in pitch_list:
-			pitch_tracks.append(t)
-	
-	return pitch_tracks
 
-@prevent_ui_refresh()
-def combine_group_tracks(group_name, reaper_tracks) -> list:
-	track_to_delete = []
-	if len(reaper_tracks):
-		main_track = reaper_tracks.pop()
-		main_track.name = group_name
-		for t in reaper_tracks:
-			t.items[0].track = main_track
-			track_to_delete.append(t)
-	return track_to_delete	
 	  
 
 if __name__ == "__main__":
