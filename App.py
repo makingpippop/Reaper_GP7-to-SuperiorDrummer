@@ -23,19 +23,28 @@ def import_drums():
 	# print(inst_variation_dict)
 	
 	#create groups
-	gp_converter 		= GP_to_SD3(score)
-	instrument_groups 	= gp_converter.groups
-	instrument_groups['Snare'].get_notes()
+	gp_converter 	= GP_to_SD3(score)
+	inst_groups		= gp_converter.groups
+	g_notes 		= inst_groups['Snare'].get_notes()
 
 	#get REAPER project
 	project = reapy.Project()
-	p_notes = project.tracks[0].items[0].takes[0].notes
-	for n in p_notes.in_measure(1):
-		print(n.pitch)
-	return
 	#import MIDI file
-	midi_item = project.import_media("D:/Documents/DAW/Reaper/Custom-actions/simple-drum-beat.mid")
+	midi_item = project.import_media('D:/Documents/DAW/Reaper/Custom-actions/Reaper_GP7-to-SuperiorDrummer/GP/_Exports/simple-drum-beat.mid')
 	midi_track = midi_item.track
+
+	p_notes = project.tracks[0].items[0].takes[0].notes
+	r_pitchs = []
+	for n in p_notes.in_measure(2):
+		r_pitchs.insert(0,n.pitch)
+
+	g_pitchs = []
+	for n in g_notes[1]:
+		#ids of the note (order in which they play)
+		g_pitchs.insert(0,n.id)
+	
+	print(r_pitchs, "\n", g_pitchs)
+	return
 	#select the imported item
 	project.select_item(midi_item, makeUnique=True)
 	#explode action (to seperate the imported midi into multiple tracks by pitch) ID 40920

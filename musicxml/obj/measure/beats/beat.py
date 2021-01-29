@@ -3,8 +3,8 @@ from typing import Type
 
 class Beat(object):
     def __init__(self, id, part_id, inst_obj):
-        #chronological id in the measure (for the specified instrument)
         self.type       = self.__class__.__name__
+        #chronological id in the measure (for the specified instrument)
         self._id        = id
         #
         self.b_xml      = None

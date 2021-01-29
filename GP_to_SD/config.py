@@ -17,7 +17,7 @@ GROUPS =    {
                 'Snare'     :   [
                                     {'GP_inst_name' : 'Snare (hit)'         , 'GP_pitch' : 38},
                                     {'GP_inst_name' : 'Snare (side stick)'  , 'GP_pitch' : 37},
-                                    {'GP_inst_name' : 'Snare (rim shot)'    , 'GP_pitch' : 37},
+                                    {'GP_inst_name' : 'Snare (rim shot)'    , 'GP_pitch' : 38},
                                     {'GP_inst_name' : 'Electric Snare (hit)', 'GP_pitch' : 40}
                                     
                                 ],

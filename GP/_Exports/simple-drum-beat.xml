@@ -9,10 +9,10 @@ Artists1</creator>
   <creator type="transcriber">Transcriber</creator>
   <rights>Copyright</rights>
   <encoding>
-   <encoding-date>2021-01-26</encoding-date>
+   <encoding-date>2021-01-29</encoding-date>
    <software>Guitar Pro 7.5.5</software>
    <encoder>Transcriber</encoder>
-   <supports value="yes" attribute="new-system" type="yes" element="print"/>
+   <supports element="print" attribute="new-system" type="yes" value="yes"/>
   </encoding>
  </identification>
  <defaults>
@@ -26,14 +26,14 @@ Artists1</creator>
   </page-layout>
  </defaults>
  <credit>
-  <credit-words valign="top" justify="center" font-size="14">Artists0
+  <credit-words font-size="14" justify="center" valign="top">Artists0
 Artists1</credit-words>
  </credit>
  <credit>
-  <credit-words valign="bottom" justify="right" font-size="12">Music</credit-words>
+  <credit-words font-size="12" justify="right" valign="bottom">Music</credit-words>
  </credit>
  <credit>
-  <credit-words valign="bottom" justify="left" font-size="12">Words</credit-words>
+  <credit-words font-size="12" justify="left" valign="bottom">Words</credit-words>
  </credit>
  <part-list>
   <score-part id="P1">
