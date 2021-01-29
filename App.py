@@ -2,7 +2,8 @@ import reapy
 from reapy import prevent_ui_refresh
 from musicxml import MusicXML
 from GP_to_SD import GP_to_SD3
-from helpers import get_nested_tracks, get_track_by_CC_pitch, combine_items_from_track_group, glue_all_items_on_track
+from helpers.reaper import get_nested_tracks, get_track_by_CC_pitch, combine_items_from_track_group, glue_all_items_on_track
+from helpers.musicxml import get_notes_from_group
 
 def import_drums():
 	musicXML 	= MusicXML("GP/_exports/simple-drum-beat.xml")
@@ -22,15 +23,21 @@ def import_drums():
 	# print(inst_variation_dict)
 	
 	#create groups
-	gp_converter 	= GP_to_SD3(score)
-	
-	project = reapy.Project()
+	gp_converter 		= GP_to_SD3(score)
+	instrument_groups 	= gp_converter.groups
+	instrument_groups['Snare'].get_notes()
 
+	#get REAPER project
+	project = reapy.Project()
+	p_notes = project.tracks[0].items[0].takes[0].notes
+	for n in p_notes.in_measure(1):
+		print(n.pitch)
+	return
+	#import MIDI file
 	midi_item = project.import_media("D:/Documents/DAW/Reaper/Custom-actions/simple-drum-beat.mid")
 	midi_track = midi_item.track
-	#select the new item
+	#select the imported item
 	project.select_item(midi_item, makeUnique=True)
-
 	#explode action (to seperate the imported midi into multiple tracks by pitch) ID 40920
 	project.perform_action(40920)
 
@@ -59,8 +66,11 @@ def import_drums():
 		#glue items
 		for t in main_tracks:
 			glue_all_items_on_track(project, t)
-
-
+			#get associated group
+			g = instrument_groups[t.name]
+			t_notes = t.items[0].takes[0].notes
+			m_notes = get_notes_from_group()
+		
 	  
 
 if __name__ == "__main__":

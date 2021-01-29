@@ -40,11 +40,8 @@ class GP_to_SD3(object):
                 #if the group is complete
                 if not len(g_info['names']):
                     break
-            print(g.instruments)
         pass
 
-    def process_group(self, group_name):
-        pass
     
     def _create_group(self, group_name):
         if group_name not in self._groups:
@@ -59,3 +56,8 @@ class GP_to_SD3(object):
             g_inst_name.append(i['GP_inst_name'].lower())
             g_inst_pitch.append(i['GP_pitch'])
         return {'names' : g_inst_name, 'pitchs' : g_inst_pitch}
+
+    
+    @property
+    def groups(self):
+        return self._groups

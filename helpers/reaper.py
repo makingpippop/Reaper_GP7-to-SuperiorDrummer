@@ -58,3 +58,4 @@ def glue_all_items_on_track(project:R_project, track:R_track) -> None:
 			project.select_item(item, makeUnique=make_unique)
 		#glue items
 		project.perform_action(41588)
+

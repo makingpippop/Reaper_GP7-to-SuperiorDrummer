@@ -24,8 +24,19 @@ class Group(object):
         self._instruments[f'{inst_obj.pitch}_{inst_obj.name}'] = inst_obj
         pass
     
-    def process(self):
+    def get_notes(self):
+        notes = []
+        #m_notes
+        for m in self._score_ref.measures:
+            for b in m.beats:
+                for n in m.beats[b]:
+                    print(n.instrument)
         pass
+
+    def convert_pitchs(self):
+
+        pass
+
     @property
     def names(self):
         return self._names
