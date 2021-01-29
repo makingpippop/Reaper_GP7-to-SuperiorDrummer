@@ -36,7 +36,8 @@ class Part():
 			#if the midi instrument ID matches the current track instrument ID
 			if inst.id == midi_inst_id:
 				inst.midiChannel 	= p_midi_inst.find('midi-channel').text
-				inst.pitch 			= p_midi_inst.find('midi-unpitched').text
+				#TO INVESTIGATE (GP PITCH IN XML IS ALWAYS 1 HIGHER)
+				inst.pitch 			= int(p_midi_inst.find('midi-unpitched').text)-1
 				inst.volume			= p_midi_inst.find('volume').text
 				inst.pan 			= p_midi_inst.find('pan').text
 				break
