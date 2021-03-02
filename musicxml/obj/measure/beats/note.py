@@ -2,14 +2,12 @@ from .beat import Beat
 from math import floor
 
 class Note(Beat):
-	def __init__(self, id, part_id, inst_obj):
-		super().__init__(id, part_id, inst_obj)
+	def __init__(self, id, part_id, measure_id, inst_obj):
+		super().__init__(id, part_id, measure_id, inst_obj)
 		#
 		self._step      = None
 		#
 		self._octave    = None
-		#pppp, ppp, pp, p, mf, ...
-		self._dynamic   = ''
 		#staccato, accent, marcato
 		self.articulations_table = {"accent" : "_accent", "strong-accent": "_marcato", "staccato" : "_staccato"}
 		self._articulations  = []
@@ -25,7 +23,27 @@ class Note(Beat):
 		#grace with a slash should be before the beat, with no slash, on beat
 		self._grace_slash 	= None
 		#is this a tuplet (triplet, quintuplet, sextuplet ...)
-	
+	def load_attributes(self, *args):
+		super().load_attributes(*args)
+		last_beats = args[2]
+		last_beat 	= last_beats['any']
+		#dynamic
+		n_dynamic 			= self.load_note_dynamic()
+		n_dynamic 			= last_beat.dynamic if n_dynamic == None else n_dynamic
+		self.dynamic 		= n_dynamic
+		#step and octave
+		self.step			= self.load_step()
+		self.octave			= self.load_octave()
+		#grace
+		grace_slash			= self.load_grace()
+		is_grace 			= True if grace_slash is not None else False
+		self.grace_slash 	= grace_slash
+		self.grace 			= is_grace
+		#articulation
+		self.load_articulations()
+		#tremolo
+		self.tremolo = self.load_tremolo()
+		
 	def load_note_dynamic(self):
 		dynamic = None
 		dynamic_attr = self.b_xml.find('./notations/dynamics/')

@@ -5,10 +5,18 @@ from GP_to_SD import GP_to_SD3
 from helpers.reaper import get_nested_tracks, get_track_by_CC_pitch, combine_items_from_track_group, glue_all_items_on_track
 from helpers.musicxml import get_notes_from_group
 
+
 def import_drums():
-	musicXML 	= MusicXML("GP/_exports/simple-drum-beat.xml")
+	musicXML 	= MusicXML("GP/_exports/find-note-beat.xml")
 	score 		= musicXML.load_score()
 	
+	for m in score.parts.P1.measures:
+		print(f'{m.id} ---------------------------------------')
+		print('Num beats :', len(m.beats))
+		for b in m.beats:
+			b = m.beats[b][0]
+			print(f'NOTE #{b.id} | Type : {b.type} | Duration : {b.duration} | Beat : {b.beat}')
+	return
 	# inst_variation_dict = {}
 	# for m in score.measures:
 	# 	for b in m.beats:
@@ -19,9 +27,9 @@ def import_drums():
 	# 				inst = n.instrument
 	# 				if inst.id not in inst_variation_dict:
 	# 					inst_variation_dict[inst.id] = {"name" : inst.name, "pitch" : inst.pitch}
-	
+
 	# print(inst_variation_dict)
-	
+
 	#create groups
 	gp_converter 	= GP_to_SD3(score)
 	inst_groups		= gp_converter.groups
@@ -30,19 +38,19 @@ def import_drums():
 	#get REAPER project
 	project = reapy.Project()
 	#import MIDI file
-	midi_item = project.import_media('D:/Documents/DAW/Reaper/Custom-actions/Reaper_GP7-to-SuperiorDrummer/GP/_Exports/simple-drum-beat.mid')
+	midi_item = project.import_media('D:/Documents/DAW/Reaper/Custom-actions/Reaper_GP7-to-SuperiorDrummer/GP/_Exports/find-note-beat.mid')
 	midi_track = midi_item.track
 
 	p_notes = project.tracks[0].items[0].takes[0].notes
 	r_pitchs = []
 	for n in p_notes.in_measure(2):
-		r_pitchs.insert(0,n.pitch)
+		r_pitchs.insert(0, n.pitch)
 
 	g_pitchs = []
 	for n in g_notes[1]:
 		#ids of the note (order in which they play)
-		g_pitchs.insert(0,n.id)
-	
+		g_pitchs.insert(0, n.id)
+			
 	print(r_pitchs, "\n", g_pitchs)
 	return
 	#select the imported item
@@ -80,7 +88,6 @@ def import_drums():
 			t_notes = t.items[0].takes[0].notes
 			m_notes = get_notes_from_group()
 		
-	  
 
 if __name__ == "__main__":
 	import_drums()

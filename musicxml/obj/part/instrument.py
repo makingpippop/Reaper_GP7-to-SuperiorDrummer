@@ -8,6 +8,7 @@ class Instrument(object):
         self._pan           = 0
         self._volume        = 80
         self._measures      = []
+        self._beats         = []
     
     def __str__(self) -> str:
         return f'<obj.Part.Instrument> {self._name} ({self._part_id}:{self._id})'

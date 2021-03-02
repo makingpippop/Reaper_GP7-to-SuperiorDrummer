@@ -25,16 +25,15 @@ class Group(object):
         pass
     
     def get_notes(self):
-        print(list(self._instruments.keys()))
         notes = []
         #loop measures
         for m in self._score_ref.measures:
-            print("MEASURE #",m.id)
+            #print("MEASURE #",m.id)
             notes.append([])
             #loop beats
             for b in m.beats:
                 for n in m.beats[b]:
-                    print('NOTE #', n.id, " - ", n.instrument.name)
+                   # print('NOTE #', n.id, " - ", n.instrument.name)
                     inst = n.instrument
                     g_inst_id = f'{inst.pitch}_{inst.name}'
                     if g_inst_id in self._instruments:
