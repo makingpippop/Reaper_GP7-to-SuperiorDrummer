@@ -11,11 +11,11 @@ def import_drums():
 	score 		= musicXML.load_score()
 	
 	for m in score.parts.P1.measures:
-		print(f'{m.id} ---------------------------------------')
+		#print(f'{m.id} ---------------------------------------')
 		print('Num beats :', len(m.beats))
 		for b in m.beats:
 			b = m.beats[b][0]
-			print(f'NOTE #{b.id} | Type : {b.type} | Duration : {b.duration} | Beat : {b.beat}')
+			#print(f'NOTE #{b.id} | Type : {b.type} | Duration : {b.duration} | Beat : {b.beat}')
 	return
 	# inst_variation_dict = {}
 	# for m in score.measures:

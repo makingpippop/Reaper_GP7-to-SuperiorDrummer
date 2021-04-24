@@ -76,6 +76,7 @@ class Part():
 			for n_xml in m_xml.findall('note'):
 				inst 		= n_xml.find('instrument')
 				inst_obj 	= None if inst is None else self._instruments[inst.get('id')]
+				beatHasInst = inst_obj is not None 
 				#inst_id 	= None if inst == None else inst.get('id')
 				#check the voice (layer) of the note
 				n_voice 	= int(n_xml.find('voice').text)
@@ -93,7 +94,7 @@ class Part():
 
 				#check for tie
 				mergeThisBeat = False
-				last_inst_beat 	= last_beats[inst_obj.id] if inst_obj and inst_obj.id in last_beats else None
+				last_inst_beat 	= last_beats[inst_obj.id] if beatHasInst and inst_obj.id in last_beats else None
 				if last_inst_beat is not None and beat_obj.tie is not None:
 					#if the current beat is the end of the tie, or the last beat was the start
 					if beat_obj.tie == 'stop' or last_inst_beat.tie == 'start':
@@ -101,12 +102,9 @@ class Part():
 						#update duration of the Note that started the tie
 						last_inst_beat.duration += beat_obj.duration
 						#print(f'THIS BEAT {m_obj.id}.{beat_obj.id} IS TIED TO : {m_obj.id}.{last_inst_beat.id}\nNew duration :{last_inst_beat.duration}')
-						beat_obj 				= last_inst_beat
 
-				#save last beats
-				if inst_obj:
-					last_beats[inst_obj.id] = beat_obj
-				last_beats['any'] 			= beat_obj
+				#save the last beat processed
+				last_beats['any'] 	= beat_obj
 
 				if new_voice:
 					cur_beat 	= 1
@@ -114,9 +112,17 @@ class Part():
 				else:
 					cur_beat = beat_obj.beat
 
+				#if this beat is not a tie
 				if not mergeThisBeat:
+					#the last beat of this instrument will be the processed beat
+					if beatHasInst:
+						last_beats[inst_obj.id] = beat_obj
 					m_obj.add_beat(beat_obj)
 					note_counter += 1
+				#if this beat is a tie
+				else:
+					#the last beat of this instrument is the begining of the tie
+					last_beats[inst_obj.id] = last_inst_beat
 				
 				
 			last_m_division = m_division

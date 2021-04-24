@@ -42,7 +42,7 @@ class Beat(object):
 		self._tuplet_ratio         = None
 		#
 		self._dotted        = False 
-        #pppp, ppp, pp, p, mf, ...
+		#pppp, ppp, pp, p, mf, ...
 		self._dynamic   = ''
 		#text entered in GP
 		self._text = None 
@@ -70,10 +70,18 @@ class Beat(object):
 		beat_duration 		= xml_beat_duration / m_division
 		self.duration 		= beat_duration
 		
-
-
-		self.beat 			= 1 if last_beat is None or last_beat.measure != self._measure else cur_beat + last_beat.duration
-		#print(f'NOTE # {self._measure}.{self.id} | Type : {self.type} | Duration : {beat_duration} | Beat : {self.beat}')
+		#if there were no beat evaluated before this one
+		#or the last beat was owned by another measure
+		if last_beat is None or last_beat.measure != self._measure:
+			self.beat  = 1
+		else:
+			self.beat = cur_beat + last_beat.duration
+			#*** HOW TO ACCESS NOTES BEFORE THIS BEAT
+			#HOW TO FIND HIS POSITION IN THE MEASURE???
+			#https://www.musicxml.com/tutorial/the-midi-compatible-part/chords/
+			#***
+		#if self._measure == 3:
+		#	print(f'NOTE # {self._measure}.{self.id} | Inst : {self.instrument.id} | Type : {self.type} | Duration : {beat_duration} | Beat : {self.beat}')
 		#if last_inst_beat:
 			#print(f'LAST INST BEAT = {last_inst_beat._measure}.{last_inst_beat.id}') 
 		
