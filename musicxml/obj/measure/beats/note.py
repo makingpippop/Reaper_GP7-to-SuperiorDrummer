@@ -23,6 +23,14 @@ class Note(Beat):
 		#grace with a slash should be before the beat, with no slash, on beat
 		self._grace_slash 	= None
 		#is this a tuplet (triplet, quintuplet, sextuplet ...)
+
+	def __str__(self) -> str:
+		return f'<obj.{self.type}> ({self.part_id}:{self.duration})({self.instrument.name}) '
+
+	def __repr__(self) -> str:
+		return f'<obj.{self.type}> ({self.part_id}:{self.duration}) ({self.instrument.name}) '
+
+
 	def load_attributes(self, *args):
 		super().load_attributes(*args)
 		last_beats = args[2]

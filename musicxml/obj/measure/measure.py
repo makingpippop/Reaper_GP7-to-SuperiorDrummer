@@ -23,7 +23,14 @@ class Measure(object):
 			self._beats[beat_id].append(beat_obj)
 		else:
 			self._beats[beat_id] = [beat_obj]
-			
+
+	def add_chord(self, beat_id, chord_obj):
+		if beat_id in self._beats:
+			self._beats[beat_id].append(chord_obj)
+		else:
+			self._beats[beat_id] = [chord_obj]
+
+	
 	# def add_beat(self, beat_id, part_id, inst):
 	# 	beat_args = (beat_id, part_id, self._id, inst)
 	# 	beat = Rest(*beat_args) if inst is None else Note(*beat_args)

@@ -17,6 +17,8 @@ class Beat(object):
 
 		#is this Note tied to other notes
 		self._tie 		= None
+		#is this note is part of a chord
+		self._chord 	= False
 		#choronological id in voice layer
 		self.voice_id   = None
 		#which beat in the measure
@@ -49,10 +51,10 @@ class Beat(object):
 
 	
 	def __str__(self) -> str:
-		return f'<obj.{self.type}> ({self._part}:{self._duration})'
+		return f'<obj.{self.type}> ({self.part_id}:{self.duration})'
 
 	def __repr__(self) -> str:
-		return f'<obj.{self.type}> ({self._part}:{self._duration})'
+		return f'<obj.{self.type}> ({self.part_id}:{self.duration})'
 
 	def set_beat_xml(self, b_xml):
 		self.b_xml = b_xml
@@ -65,6 +67,8 @@ class Beat(object):
 
 		#voice (layer)
 		self.voice 			= self.load_voice()
+		#chord
+		self._chord 		= self.load_chord()
 		#duration
 		xml_beat_duration 	= self.load_duration()
 		beat_duration 		= xml_beat_duration / m_division
@@ -75,10 +79,16 @@ class Beat(object):
 		if last_beat is None or last_beat.measure != self._measure:
 			self.beat  = 1
 		else:
-			self.beat = cur_beat + last_beat.duration
+			#if this beat is part of a chord
+			if self.chord:
+				self.beat = last_beat.beat
+			else:
+				self.beat = cur_beat + last_beat.duration
 			#*** HOW TO ACCESS NOTES BEFORE THIS BEAT
 			#HOW TO FIND HIS POSITION IN THE MEASURE???
 			#https://www.musicxml.com/tutorial/the-midi-compatible-part/chords/
+			#</chord> is on all the following notes. I need to return in the last notes to search
+			#for the one without chord
 			#***
 		#if self._measure == 3:
 		#	print(f'NOTE # {self._measure}.{self.id} | Inst : {self.instrument.id} | Type : {self.type} | Duration : {beat_duration} | Beat : {self.beat}')
@@ -92,6 +102,8 @@ class Beat(object):
 		self.tuplet_ratio 	= self.load_tuplet_ratio()
 		#tie
 		self._tie 			= self.load_tie()
+		
+
 
 	def load_duration(self):
 		duration = None
@@ -128,10 +140,23 @@ class Beat(object):
 
 	def load_tie(self):
 		tied 		= None
-		tie_tag		= self.b_xml.find('tie')
-		if tie_tag is not None:
-			tied = tie_tag.get('type')
+		tie_tag		= self.b_xml.findall('tie')
+		nb_tag 		= len(tie_tag)
+		if nb_tag:
+			#in the middle of a tie
+			if nb_tag > 1:
+				tied = "True"
+			else:
+				tied = tie_tag[0].get('type')
 		return tied
+
+	def load_chord(self):
+		chord_tag		= self.b_xml.find('chord')
+		return False if chord_tag is None else True
+
+	def add_note_to_chord(self, note_obj):
+
+		return
 	# def load_(self, b_xml):
 	#     return
 
@@ -223,6 +248,14 @@ class Beat(object):
 	@tie.setter
 	def tie(self, value):
 		self._tie = value
+	
+	@property
+	def chord(self):
+		return self._chord
+	@chord.setter
+	def chord(self, value):
+		self._chord = value
+
 
 	@property
 	def text(self):

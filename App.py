@@ -15,7 +15,10 @@ def import_drums():
 		print('Num beats :', len(m.beats))
 		for b in m.beats:
 			b = m.beats[b][0]
-			#print(f'NOTE #{b.id} | Type : {b.type} | Duration : {b.duration} | Beat : {b.beat}')
+			num_notes = 1 if b.type != "Chord" else len(b.notes)
+			print(f'NOTE #{b.id} | Type : {b.type} | Duration : {b.duration} | Beat : {b.beat} | Num note values : {num_notes}')
+			if b.type == "Chord":
+				print(b.notes)
 	return
 	# inst_variation_dict = {}
 	# for m in score.measures:
