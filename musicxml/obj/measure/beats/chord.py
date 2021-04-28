@@ -38,13 +38,14 @@ class Chord(Beat):
 	@property
 	def duration(self):
 		#return the smallest duration of all the notes in the chord (in case there's a tie)
-		return min([n.duration for n in self._notes])
-	
-	
+		return min([n.duration for n in self._notes])	
 	
 	@property
 	def instruments(self):
 		return [n.instrument for n in self._notes]
 	
 
+	@property
+	def voice(self):
+		return self._ref_note.voice
 	

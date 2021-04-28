@@ -23,6 +23,8 @@ class Beat(object):
 		self.voice_id   = None
 		#which beat in the measure
 		self._beat      = 0
+		#which beat in the song
+		self._abs_beat = 0
 		#position in the measure (0.0 -> 1.0) 
 		self._position  = 0
 		#duration, in relation a the measure length (0.0 -> 4.0)
@@ -76,7 +78,7 @@ class Beat(object):
 		
 		#if there were no beat evaluated before this one
 		#or the last beat was owned by another measure
-		if last_beat is None or last_beat.measure != self._measure:
+		if last_beat is None or last_beat.measure != self._measure or last_beat.voice != self.voice:
 			self.beat  = 1
 		else:
 			#if this beat is part of a chord
@@ -271,6 +273,13 @@ class Beat(object):
 	def beat(self, value):
 		self._beat = value
 
+	@property
+	def abs_beat(self):
+		return self._abs_beat
+	@abs_beat.setter
+	def beat(self, value):
+		self._abs_beat = value
+	
 	@property
 	def measure(self):
 		return self._measure

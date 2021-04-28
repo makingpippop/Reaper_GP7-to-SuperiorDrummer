@@ -62,7 +62,7 @@ class Part():
 		last_m_division 	= None
 		last_beats  		= {'any': None}
 		last_chord			= None
-
+		abs_beat 			= 1
 		for m_xml in self.part_measure_xml:
 			m_id 	= int(m_xml.get('number'))
 			m_obj 	= self._measures[m_id - 1]
@@ -75,7 +75,7 @@ class Part():
 			cur_beat		= 1
 			chord_in_progress = False
 			
-			#print(f'MEASURE #{m_id} | Division : {m_division}')
+			#print(f'MEASURE #{m_id} | Division : {m_division} ----------------------------------------------------')
 			for n_xml in m_xml.findall('note'):
 				inst 		= n_xml.find('instrument')
 				inst_obj 	= None if inst is None else self._instruments[inst.get('id')]
@@ -84,7 +84,11 @@ class Part():
 				#check the voice (layer) of the note
 				n_voice 	= int(n_xml.find('voice').text)
 				#if we changed voice, reset the counter
-				new_voice = n_voice != cur_voice
+				new_voice 	= n_voice != cur_voice
+				if new_voice:
+					cur_beat 	= 1
+					cur_voice 	= n_voice
+
 				note_counter = 0 if new_voice else note_counter
 
 				#add a beat to the measure
@@ -93,27 +97,47 @@ class Part():
 				#beat_obj = m_obj.add_beat(note_counter, self.id, inst_obj)
 				beat_obj.set_beat_xml(n_xml)
 				beat_obj.load_attributes(m_division, cur_beat, last_beats)
+				#print(f'BEAT ({beat_obj.type}) #{beat_obj.voice}.{beat_obj.id} | ({beat_obj.instrument}) | Duration : {beat_obj.duration} | Beat : {beat_obj.beat}')
 
-				#print(f'#{m_obj.id}.{beat_obj.id}')
-				#are we done writing a chord?
+				#are we done writing a chord? ----------------------------------------------------------------------------
 				if note_counter and last_beats['any'].chord is not False and beat_obj.chord is False:
 					#print('DONE WITH A CHORD')
-					if last_chord :
+					#check if all the notes in the chord are tied
+					new_chord_tie = True
+					for n in last_beats['any'].chord.notes:
+							if n.played :
+								new_chord_tie = False
+								break
+
+
+					if last_chord and new_chord_tie:
 						new_chord 			= last_beats['any'].chord
-						#*******************************************************
-						#*******************************************************
-						#CHECK IF ALL THE NOTES IN THE CHORD ARE TIED BEFORE COMPARING AND DELETING
-						#*******************************************************
-						#*******************************************************
+	
 						sorted_new_chord 	= [i.id for i in new_chord.instruments]
 						sorted_last_chord 	= [i.id for i in last_chord.instruments]
 						sorted_new_chord.sort()
 						sorted_last_chord.sort()
+						same_voice_chord 	= None
 						#if the latest chord is the same as the older one
 						if sorted_last_chord == sorted_new_chord:
-							del m_obj.beats[new_chord.id]
-							note_counter -= 1
-							beat_obj._id -= 1
+							#go through every beat and chord of the measure
+							for i, b in enumerate(m_obj.beats[new_chord.id]):
+								#if the analyzed object is a chord, it shares the same ID and same voice
+								if b.type == 'chord' and b.id == new_chord.id and b.voice == new_chord.voice:
+									same_voice_chord = i
+									break
+
+							#if we found a match
+							if same_voice_chord is not None:
+								#delete this entry from the measure
+								del m_obj.beats[new_chord.id][same_voice_chord]
+								beat_obj._id -= 1
+
+							#if this measure is now empty
+							if not len(m_obj.beats[new_chord.id]):
+								del m_obj.beats[new_chord.id]
+								note_counter -= 1
+								
 
 						else:
 							last_chord = new_chord
@@ -122,22 +146,25 @@ class Part():
 						last_chord = last_beats['any'].chord
 					chord_in_progress = False
 
-				#check for tie
+				#check for tie ----------------------------------------------------------------------------
 				mergeThisBeat 	= False
 				beat_is_tie 	= True if beat_obj.tie is not None else False
 				last_inst_beat 	= last_beats[inst_obj.id] if beatHasInst and inst_obj.id in last_beats else None
 				#if there's an older beat made by this instrument
 				if last_inst_beat is not None and beat_is_tie:
+					#print(f'\tis tied!')
 					#if the current beat is the end of the tie, or the last beat was the start
-					if last_inst_beat.tie == 'start':
+					if last_inst_beat.tie == 'start' and beat_obj.tie != 'start':
 						mergeThisBeat = True
 						#update duration of the Note that started the tie
 						last_inst_beat.duration += beat_obj.duration
+						#print(f'\tmerge with last note, now : {last_inst_beat.duration}')
 						#print(f'THIS BEAT {m_obj.id}.{beat_obj.id} IS TIED TO : {m_obj.id}.{last_inst_beat.id}\nNew duration :{last_inst_beat.duration}')
 
-				#check for chord
+				#check for chord ----------------------------------------------------------------------------
 				beat_is_chord = beat_obj.chord is not False
 				if beat_is_chord:
+					#print(f'\tis a chord!')
 					#if the last beat had no <chord>, it was the first note of the chord
 					if last_beats['any'].chord is False:
 						chord_in_progress = True
@@ -146,9 +173,21 @@ class Part():
 						#change the last Beat to be a chord
 						last_beats['any'].chord = chord_obj
 						#check if the beat exists in the mesure (the beat would not exist if the start of the chord was tied)
-						last_beat_id = last_beats['any'].id 
-						if last_beat_id in m_obj.beats:
-							m_obj.beats[last_beats['any'].id][0] = chord_obj
+						last_beat_id 	= last_beats['any'].id 
+						beat_exists 	= last_beat_id in m_obj.beats
+						same_voice 		= None
+						if beat_exists:
+							#print(f'\tBeat ID in measure!')
+							#loop all notes in the beat (to get the one witch matching voice)
+							for i, n in enumerate(m_obj.beats[last_beat_id]):
+								if n.voice == beat_obj.voice:
+									same_voice = i
+									break
+
+						if same_voice is not None:
+							#print(f'\t\twith same voice! : {m_obj.beats[last_beat_id][same_voice]}')
+							m_obj.beats[last_beat_id][same_voice] = chord_obj
+
 						else:
 							m_obj.add_chord(beat_obj.id, chord_obj)
 							note_counter += 1
@@ -161,10 +200,11 @@ class Part():
 				#save the last beat processed
 				last_beats['any'] 	= beat_obj
 
-				if new_voice:
-					cur_beat 	= 1
-					n_voice 	= cur_voice
-				else:
+				#############################################
+				#is this note a tremolo? ----------------------------------------------------------------------------
+				#############################################
+
+				if not new_voice:
 					cur_beat = beat_obj.beat
 
 				#if this beat is not a tie

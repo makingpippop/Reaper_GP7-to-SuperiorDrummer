@@ -9,11 +9,12 @@ class Note(Beat):
 		#
 		self._octave    = None
 		#staccato, accent, marcato
-		self.articulations_table = {"accent" : "_accent", "strong-accent": "_marcato", "staccato" : "_staccato"}
+		self.articulations_table = {"accent" : "_accent", "strong-accent": "_marcato", "staccato" : "_staccato",  "tenuto" : "_tenuto"}
 		self._articulations  = []
 		self._staccato 		= False
 		self._accent 		= False
 		self._marcato		= False
+		self._tenuto 		= False
 		self._ghost 		= False
 		#tremolo indicate that it's a roll. This value will be equal to the ratio of tremolo subdivision (eight, 16th, 32th)
 		self._tremolo 			= 0
@@ -25,10 +26,10 @@ class Note(Beat):
 		#is this a tuplet (triplet, quintuplet, sextuplet ...)
 
 	def __str__(self) -> str:
-		return f'<obj.{self.type}> ({self.part_id}:{self.duration})({self.instrument.name}) '
+		return f'<obj.{self.type}> ({self.part_id}|B:{self.beat} D:{self.duration})({self.instrument.name}) '
 
 	def __repr__(self) -> str:
-		return f'<obj.{self.type}> ({self.part_id}:{self.duration}) ({self.instrument.name}) '
+		return f'<obj.{self.type}> ({self.part_id}|B:{self.beat} D:{self.duration}) ({self.instrument.name}) '
 
 
 	def load_attributes(self, *args):
@@ -94,7 +95,7 @@ class Note(Beat):
 		if ghost_attr is not None:
 			self._articulations = ['ghost']
 			self._ghost 		= True
-	
+
 
 	
 	@property
@@ -166,3 +167,8 @@ class Note(Beat):
 	@ghost.setter
 	def ghost(self, value):
 		self._ghost = value
+
+	@property
+	def played(self):
+		return True if self._tie is None or self._tie == 'start' else False
+	

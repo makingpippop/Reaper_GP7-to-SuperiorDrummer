@@ -63,6 +63,7 @@ class Score(object):
 			#apply to measure
 			measure.bpm 		= bpm
 			measure.signature 	= signature
+			#print(f'MEASURE #{m_id} | Duration : {measure.duration}')
 			#measure.subdivision = subdivision
 			self._measures.append(measure)
 			#save for next measures

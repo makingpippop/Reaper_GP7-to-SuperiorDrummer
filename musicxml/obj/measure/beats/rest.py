@@ -11,3 +11,7 @@ class Rest(Beat):
 		#dynamic
 		self.dynamic = last_beat.dynamic
 
+	@property
+	def played(self):
+		return False
+

@@ -55,6 +55,7 @@ class Measure(object):
 			beat_sub = int(m_time_attr.find("beat-type").text)
 			signature = [beat, beat_sub]
 
+			
 		#if this is the first measure dans there's no signature
 		if signature is None and self.id == 1:
 			raise Exception('Error whithin the file. No time signature on the first measure')
@@ -99,6 +100,12 @@ class Measure(object):
 		self._signature = value
 
 	@property
+	def duration(self):
+		#(3/4)*4
+		return (self._signature[0]/self.signature[1])*self._signature[1]
+	
+
+	@property
 	def instruments(self):
 		return self._instruments
 	
@@ -110,3 +117,5 @@ class Measure(object):
 	@property
 	def parts(self):
 		return None
+
+
