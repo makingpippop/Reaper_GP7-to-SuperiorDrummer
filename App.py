@@ -6,7 +6,7 @@ from helpers.reaper import get_nested_tracks, get_track_by_CC_pitch, combine_ite
 from helpers.musicxml import link_MIDI_to_notation
 
 from itertools import chain
-FILENAME 		= "01_Obsessions_v4"
+FILENAME 		= "02_Hoax_v10_test"
 DRUM_PART_ID 	= 1
 def import_drums():
 	##################################################
@@ -14,7 +14,7 @@ def import_drums():
 	#FIX ERROR WHEN FIRST MEASURE HAS NO NOTES
 	##################################################
 	##################################################
-	musicXML 	= MusicXML(f"../{FILENAME}.xml")
+	musicXML 	= MusicXML(f"GP/_Exports/{FILENAME}.xml")
 	score 		= musicXML.load_score()
 	# for m in score.parts.P1.measures:
 	# 	print(f'{m.id} ---------------------------------------')
@@ -59,7 +59,7 @@ def import_drums():
 	#set cursor to begining
 	project.cursor_position = 0
 	#import MIDI file
-	midi_item = project.import_media(f'D:/Documents/DAW/Reaper/Custom-actions/{FILENAME}.mid')
+	midi_item = project.import_media(f'D:/Documents/DAW/Reaper/Custom-actions/Reaper_GP7-to-SuperiorDrummer/GP/_Exports/{FILENAME}.mid')
 	midi_track = midi_item.track
 	#Add SD3 to the track's FX
 	midi_track.add_fx("Superior Drummer 3 (Toontrack) (32 out)")
@@ -93,7 +93,7 @@ def import_drums():
 		print('Deleting ununsed tracks')
 		for t in ununsed_tracks:
 			t.delete()
-
+		midi_item.delete()
 		project.end_undo_block()
 
 		#glue items

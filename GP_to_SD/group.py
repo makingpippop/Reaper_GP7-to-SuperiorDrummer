@@ -90,11 +90,14 @@ class Group(object):
 			note_dyn 	= gp_n.dynamic
 			vel_range 	= VELOCITIES['default'][note_dyn]
 			#if there's a specific range for this group
-			if self._group_name in VELOCITIES and note_dyn in VELOCITIES[_group_name]:
-				vel_range 	= VELOCITIES[_group_name][note_dyn]
-			#if there's a specific range for this instrument
-			if inst_id in VELOCITIES and note_dyn in VELOCITIES[inst_id]:
-				vel_range 	= VELOCITIES[inst_id][note_dyn]
+			if self._group_name in VELOCITIES:
+				group_vel = VELOCITIES[self._group_name]
+				#if there's a specific range for this instrument
+				if inst_id in group_vel and note_dyn in group_vel[inst_id]:
+					vel_range 	= group_vel[inst_id][note_dyn]
+				elif 'default' in group_vel and note_dyn in group_vel['default']:
+					vel_range 	= group_vel['default'][note_dyn]
+				
 			
 			final_vel 		= randint(vel_range[0], vel_range[1])
 			r_n.velocity 	= final_vel
@@ -103,13 +106,23 @@ class Group(object):
 			for m in MODIFIERS:
 				#if the note contains one of the modifiers
 				if m in gp_n._articulations:
-					m_range 	= MODIFIERS[m]
+					m_range 	= MODIFIERS[m]['default']
+
+					if self._group_name in MODIFIERS[m]:
+						group_mod = MODIFIERS[m][self._group_name]
+						#if there's a specific range for this instrument
+						if inst_id in group_mod:
+							m_range 	= group_mod[inst_id]
+						elif 'default' in group_mod:
+							m_range 	= group_mod['default']
+
 					m_val 		= randint(m_range[0], m_range[1])
 					m_val 		= 1-m_val if m == 'ghost' else m_val
 					new_vel 	= r_n.velocity + m_val
 					r_n.velocity = new_vel
 
 			pass
+
 
 		gp_notes = self.get_notes_from_part(gp_part_id)
 		abs_beat = 0

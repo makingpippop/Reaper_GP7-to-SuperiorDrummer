@@ -12,7 +12,7 @@ Artists1</creator>
    <encoding-date>2021-04-28</encoding-date>
    <software>Guitar Pro 7.5.5</software>
    <encoder>Transcriber</encoder>
-   <supports attribute="new-system" type="yes" value="yes" element="print"/>
+   <supports type="yes" attribute="new-system" element="print" value="yes"/>
   </encoding>
  </identification>
  <defaults>
@@ -26,14 +26,14 @@ Artists1</creator>
   </page-layout>
  </defaults>
  <credit>
-  <credit-words font-size="14" justify="center" valign="top">Artists0
+  <credit-words valign="top" font-size="14" justify="center">Artists0
 Artists1</credit-words>
  </credit>
  <credit>
-  <credit-words font-size="12" justify="right" valign="bottom">Music</credit-words>
+  <credit-words valign="bottom" font-size="12" justify="right">Music</credit-words>
  </credit>
  <credit>
-  <credit-words font-size="12" justify="left" valign="bottom">Words</credit-words>
+  <credit-words valign="bottom" font-size="12" justify="left">Words</credit-words>
  </credit>
  <part-list>
   <score-part id="P1">
@@ -914,7 +914,7 @@ Artists1</credit-words>
    </attributes>
    <direction directive="yes">
     <direction-type>
-     <metronome default-y="40" parentheses="no">
+     <metronome parentheses="no" default-y="40">
       <beat-unit>quarter</beat-unit>
       <per-minute>115</per-minute>
      </metronome>
@@ -936,7 +936,7 @@ Artists1</credit-words>
     <beam number="2">begin</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -956,7 +956,7 @@ Artists1</credit-words>
     <beam number="2">begin</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -975,7 +975,7 @@ Artists1</credit-words>
     <beam number="2">continue</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -994,7 +994,7 @@ Artists1</credit-words>
     <beam number="2">continue</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -1013,7 +1013,7 @@ Artists1</credit-words>
     <beam number="2">end</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -1031,7 +1031,7 @@ Artists1</credit-words>
     <beam number="1">begin</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -1050,7 +1050,7 @@ Artists1</credit-words>
     <beam number="1">continue</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -1069,7 +1069,7 @@ Artists1</credit-words>
     <beam number="2">begin</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -1088,7 +1088,7 @@ Artists1</credit-words>
     <beam number="2">continue</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -1107,7 +1107,7 @@ Artists1</credit-words>
     <beam number="2">end</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -1125,7 +1125,7 @@ Artists1</credit-words>
     <beam number="1">begin</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>
@@ -1143,7 +1143,7 @@ Artists1</credit-words>
     <beam number="1">end</beam>
     <notations>
      <dynamics>
-      <mf/>
+      <ff/>
      </dynamics>
     </notations>
    </note>

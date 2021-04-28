@@ -128,18 +128,20 @@ PITCHS     =   {
 												},
 					'46_Hi-Hat (half)'     		: {  
 													'default'   : [64,24],   #open edge 0 || open edge 1
-													'marcato'    : [24,25],   #open edge 1 || open edge 2
+													'marcato'    : 25,   #open edge 1 || open edge 2
+													'accent'	: 25
 													'ghost'		: [13,14], 	 #open tip 1 || open tip 2
 													'tremolo'	: 65, 		#sequenced hits                                      
 												},
 					'46_Hi-Hat (open)'     		: {  
-													'default'   : [25,26],   # open edge 2 || open edge 3
+													'default'   : 25,   #open edge 3
+													'accent'	: [26,60],
 													'marcato'    : [26,60],  	 #open edge 3 || open edge 4
 													'ghost'		: [14,15], 	 #open tip 2 || open tip 3
 												},
 					'44_Pedal Hi-Hat (hit)'		: {  
 													'default'   : 21,   #closed pedal
-													'marcato'	: 23, 	#open pedal
+													'accent'	: 23, 	#open pedal
 												},
 
 					#RIDE -----------------------------------------------------------------------------------
@@ -197,34 +199,61 @@ PITCHS     =   {
 #how much velocity to add to the default
 MODIFIERS =     {	
 					#will remove
-					'ghost'		: [12,18],
+					'ghost'		: 	{
+										'default' 	: [12,18],
+										'Snare'		: 	{
+															'default' :[25,50],
+														}
+									},
+									
 					#will add
-					'accent'    : [4,9],
-					'marcato'   : [8,15],
+					'accent'    : 	{
+										'default'	: [4,9]
+									},
+					'marcato'   :	{
+										'default'	: [8,15]
+									},
 				}
 
 VELOCITIES =    {
-					'default' 				:     	{
-														'pppp'  : [5,20],
-														'ppp'   : [21,35],
-														'pp'    : [36,50],
-														'p'     : [51,70],
-														'mp'    : [71,90],
-														'mf'    : [91,106],
-														'f'     : [107,113],
-														'ff'    : [114,120],
-														'fff'   : [121, 127]
-													},
-					'38_Snare (rim shot)'   :     	{
-														'mf'    : [100,114],
-														'f'     : [115,119],
-														'ff'    : [120,124],
-														'fff'   : [125, 127]
-													},
-					'53_Ride (bell)'		:		{
-														'mf'    : [85,103],
-														'f'     : [104,112],
-														'ff'    : [113,120],
-														'fff'   : [120, 127]
-													}
+					'default'		:  {
+												'pppp'  : [5,20],
+												'ppp'   : [21,35],
+												'pp'    : [36,50],
+												'p'     : [51,70],
+												'mp'    : [71,90],
+												'mf'    : [91,106],
+												'f'     : [107,113],
+												'ff'    : [114,120],
+												'fff'   : [121, 127]
+									  },
+					'Snare'			: {
+
+											'38_Snare (hit)'		:		{	
+																				'ppp'	: [15, 30],
+																				'pp'	: [39, 57],
+																				'p'		: [55, 75],
+																				'mp'	: [80, 98],
+																				'mf'    : [99,113],
+																				'f'		: [107,115],
+																				'ff'	: [112, 121],
+																				'fff'	: [120, 127]
+																			},
+											'38_Snare (rim shot)'   :     	{	
+																				'ppp'	: [17, 35],
+																				'pp'	: [40, 52],
+																				'p'		: [54 ,70],
+																				'mp'	: [74, 86],
+																				'mf'    : [100,110],
+																				'f'     : [108,119],
+																				'ff'    : [116,124],
+																				'fff'   : [125, 127]
+																			},
+											'53_Ride (bell)'		:		{
+																				'mf'    : [85,103],
+																				'f'     : [104,112],
+																				'ff'    : [113,120],
+																				'fff'   : [120, 127]
+																			}
+										}
 				}
