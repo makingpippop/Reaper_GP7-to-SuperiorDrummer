@@ -12,7 +12,11 @@
 # #crash medium, crash high, splash, china
 # cymbals_group 	= [57, 49, 55, 52] #[58, 50, 56, 53]
 
-
+from .Snare import *
+from .Bass_drum import *
+from .Toms import *
+from .Ride import *
+from .Cymbals import *
 GROUPS =    {
 				'Snare'     :   [
 									{'GP_inst_name' : 'Snare (hit)'         , 'GP_pitch' : 38},
@@ -127,17 +131,17 @@ PITCHS     =   {
 													'tremolo'	: 65, 	#sequenced hits                                      
 												},
 					'46_Hi-Hat (half)'     		: {  
-													'default'   : [64,24],   #open edge 0 || open edge 1
-													'marcato'    : 25,   #open edge 1 || open edge 2
-													'accent'	: 25
+													'default'   : 64,   #open edge 0
+													'marcato'   : 24,   #open edge 1
+													'accent'	: 24,
 													'ghost'		: [13,14], 	 #open tip 1 || open tip 2
 													'tremolo'	: 65, 		#sequenced hits                                      
 												},
 					'46_Hi-Hat (open)'     		: {  
-													'default'   : 25,   #open edge 3
-													'accent'	: [26,60],
-													'marcato'    : [26,60],  	 #open edge 3 || open edge 4
-													'ghost'		: [14,15], 	 #open tip 2 || open tip 3
+													'default'   : 24,   	#open edge 1
+													'accent'	: 25, 		#open edge 2
+													'marcato'   : [25,36], 	#open edge 2 || open edge 3
+													'ghost'		: [13,14], 	#open tip 1 || open tip 2
 												},
 					'44_Pedal Hi-Hat (hit)'		: {  
 													'default'   : 21,   #closed pedal
@@ -146,76 +150,79 @@ PITCHS     =   {
 
 					#RIDE -----------------------------------------------------------------------------------
 					'51_Ride (edge)'  			: {  
-													'default'   : 29,   #bow shank
-													'accent' 	: 59 	#edge
+													'default'   : 56,   #bow shank
+													'accent' 	: 55 	#edge
 												},
 					'51_Ride (middle)'			: {  
-													'default'   : 51,   #bow tip
-													'accent' 	: 29 	#bow shank
+													'default'   : 57,   #bow tip
+													'accent' 	: 56 	#bow shank
 												},
 					'53_Ride (bell)'  			: {  
-													'default'   : 30,   #bell tip
-													'marcato' 	: 53 	#bell shank
+													'default'   : 59,   #bell tip
+													'marcato' 	: 58 	#bell shank
 												},
 					'51_Ride (choke)' 			: {  
-													'default'   : 118,   #Mute hit
+													'default'   : 54,   #Mute hit
 												},
 					#CYMBALS ---------------------------------------------------------------------------------
 					#SD Cymbal 3
 					'55_Splash (hit)'   		: {  
-													'default'   : 55,   #bow shank
-													'ghost' 	: 96 	#bow tip
+													'default'   : 85,   #bow shank
+													'ghost' 	: 86 	#bow tip
 												},     
 					'55_Splash (choke)'			: {  
-													'default'   : 56,   #mute hit
+													'default'   : 88,   #STAX
 												},
 					#SD Cymbal 5   
 					'52_China (hit)'    		: {  
-													'default'   : 52,   #bow shank
-													'ghost' 	: 108 	#bow tip
+													'default'   : 109,   #Crash
+													'ghost' 	: 111 	#bow tip
 												},       
 					'52_China (choke)'			: {  
-													'default'   : 54   #mute hit
+													'default'   : 108   #mute hit
 												},
 					#SD Cymbal 2    
 					'49_Crash high (hit)'    	: {  
-													'default'   : 49,   #bow shank
-													'ghost' 	: 27 	#bow tip
+													'default'   : 97,   #Crash
+													'ghost' 	: 99 	#bow tip
 												},
 					'49_Crash high (choke)'		: {  
-													'default'   : 50,   #mute hit
+													'default'   : 96,   #mute hit
 												},
 					#SD Cymbal 4
 					'57_Crash medium (hit)'  	: {  
-													'default'   : 57,   #bow shank
-													'ghost' 	: 31 	#bow tip
+													'default'   : 103,  #Crash
+													'ghost' 	: 105 	#bow tip
 												},
 					'57_Crash medium (choke)'	: {  
-													'default'   : 58,   #mute hit
+													'default'   : 102,   #mute hit
 												},
 
 				}
 
-#how much velocity to add to the default
-MODIFIERS =     {	
-					#will remove
-					'ghost'		: 	{
-										'default' 	: [12,18],
-										'Snare'		: 	{
-															'default' :[25,50],
-														}
-									},
-									
-					#will add
-					'accent'    : 	{
-										'default'	: [4,9]
-									},
-					'marcato'   :	{
-										'default'	: [8,15]
-									},
-				}
 
-VELOCITIES =    {
+
+ARTICULATIONS = {
+				#default for every instrument
+				'default': {
+							#mininum dynamic - [min, max]
+							'ghost': [12, 18],
+											
+							#maximum dynamic + [min, max]
+							'accent': [4, 9],
+							'marcato': [8, 15]
+				#Group name
+				},
+				'Snare'		: SNARE_ARTICULATIONS,
+				'Bass-drum'	: BASS_DRUM_ARTICULATIONS,
+				'Toms'		: TOMS_ARTICULATIONS,
+				'Ride'		: RIDE_ARTICULATIONS,
+				'Cymbals'	: CYMBALS_ARTICULATIONS,
+
+					
+}
+
+DYNAMICS =    {		#default for every instrument
 					'default'		:  {
 												'pppp'  : [5,20],
 												'ppp'   : [21,35],
@@ -227,33 +234,11 @@ VELOCITIES =    {
 												'ff'    : [114,120],
 												'fff'   : [121, 127]
 									  },
-					'Snare'			: {
+					#group name
+					'Snare'			: SNARE_DYNAMICS,
+					'Bass-drum'		: BASS_DRUM_DYNAMICS,
+					'Toms'			: TOMS_DYNAMICS,
+					'Ride'			: RIDE_DYNAMICS,
+					'Cymbals'		: CYMBALS_DYNAMICS,
 
-											'38_Snare (hit)'		:		{	
-																				'ppp'	: [15, 30],
-																				'pp'	: [39, 57],
-																				'p'		: [55, 75],
-																				'mp'	: [80, 98],
-																				'mf'    : [99,113],
-																				'f'		: [107,115],
-																				'ff'	: [112, 121],
-																				'fff'	: [120, 127]
-																			},
-											'38_Snare (rim shot)'   :     	{	
-																				'ppp'	: [17, 35],
-																				'pp'	: [40, 52],
-																				'p'		: [54 ,70],
-																				'mp'	: [74, 86],
-																				'mf'    : [100,110],
-																				'f'     : [108,119],
-																				'ff'    : [116,124],
-																				'fff'   : [125, 127]
-																			},
-											'53_Ride (bell)'		:		{
-																				'mf'    : [85,103],
-																				'f'     : [104,112],
-																				'ff'    : [113,120],
-																				'fff'   : [120, 127]
-																			}
-										}
 				}

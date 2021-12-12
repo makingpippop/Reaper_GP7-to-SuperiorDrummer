@@ -45,6 +45,7 @@ def combine_items_from_track_group(group_name:str, tracks:R_tracks) -> R_tracks:
 		if len(tracks):
 			main_track 		= tracks.pop()
 			main_track.name = group_name
+
 			for t in tracks:
 				t.items[0].track = main_track
 				unused_tracks.append(t)
@@ -57,5 +58,5 @@ def glue_all_items_on_track(project:R_project, track:R_track) -> None:
 			make_unique = i == 0
 			project.select_item(item, makeUnique=make_unique)
 		#glue items
-		project.perform_action(41588)
+		project.perform_action(42432)
 

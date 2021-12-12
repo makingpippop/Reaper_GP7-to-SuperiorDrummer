@@ -51,7 +51,7 @@ class Note(Beat):
 		#articulation
 		self.load_articulations()
 		#tremolo
-		self.tremolo = self.load_tremolo()
+		self._tremolo = self.load_tremolo()
 		
 	def load_note_dynamic(self):
 		dynamic = None
@@ -171,4 +171,12 @@ class Note(Beat):
 	@property
 	def played(self):
 		return True if self._tie is None or self._tie == 'start' else False
+	
+	@property
+	def tremolo(self):
+		return self._tremolo
+	@property
+	def nb_tremolo_note(self):
+		return 0 if self._tremolo == 0 else self._nb_tremolo_note-1
+	
 	

@@ -1,33 +1,40 @@
-from pathlib import Path
 import os
 from sys import exc_info
+from pathlib import Path
 import xml.etree.ElementTree as ET
+
+
 from .obj import Score
+from .err import *
+from the_logger import TheLogger
 
 
 class MusicXML():
 	
 	def __init__(self, filePath):
-		self.data 		= None
-		self.filePath 	= filePath
-		self.fullPath 	= None
-		self.exec_folder = Path(os.getcwd())
+		self.logger = TheLogger(__name__, stream='INFO', file='INFO')
+
+		self.data 			= None
+		self.filePath 		= filePath
+		self.fullPath 		= None
+		self.exec_folder 	= Path(os.getcwd())
 
 		
 		#objects
-		self._score 	= None
+		self._score = None
 		self.openFile()
 
 	def openFile(self):
 		#combine filepath to current directory
 		p = self.exec_folder / Path(self.filePath)
 		self.fullPath = p.as_posix()
+		self.logger.Log(f"Getting the file : {self.fullPath}", 'INFO')
 		#check if file exists
 		if not p.exists():
-			raise FileNotFoundError(f"The file '{self.fullPath}' could not be found")
+			raise ScoreNotFound(self.fullPath)
 		#make sure it's a XML
 		if p.suffix.lower() != ".xml":
-			raise TypeError('The file must be a XML')
+			raise ScoreFileFormat
 		#load data
 		self.data = self.loadXML()
 		
@@ -39,13 +46,15 @@ class MusicXML():
 				rootObj = xmlFile.getroot()
 				content = rootObj
 		except ET.ParseError:
-			raise ET.ParseError(f"Unexpected error while loading the file:\n{self.fullPath}\n{exc_info()}")
+			raise ScoreParsing(self.fullPath, exc_info())
 
 		return content
 
 	def load_score(self):
 		xml_score_title = self.data.find("work/work-title")
+		#set default name of the score if not set
 		score_name = 'untitled' if xml_score_title is None else xml_score_title.text
+		#create Score object
 		self._score = Score(score_name, self.data)
 		self._score.load_parts()
 		#create Measures
@@ -55,14 +64,8 @@ class MusicXML():
 
 
 	@property
-	def parts(self):
-		return self._parts
-	
-	@property
-	def part_list(self):
-		return self._part_list
-
-	@property
 	def score(self):
+		if not self._score:
+			raise ScoreNotLoaded(self.logger)
 		return self._score
 

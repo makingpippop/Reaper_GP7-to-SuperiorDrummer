@@ -1,0 +1,7 @@
+from .cymbals import ARTICULATIONS as CYMBALS_ARTICULATIONS
+from .cymbals import DYNAMICS as CYMBALS_DYNAMICS
+
+__all__ = 	[
+				"CYMBALS_ARTICULATIONS",
+				"CYMBALS_DYNAMICS"
+			]

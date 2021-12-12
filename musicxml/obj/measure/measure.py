@@ -65,7 +65,7 @@ class Measure(object):
 		bpm = None
 		metronome_attr = xml_measure.find('./direction/direction-type/metronome')
 		if metronome_attr is not None:
-			bpm = int(metronome_attr.find("per-minute").text)
+			bpm = round(float(metronome_attr.find("per-minute").text))
 
 		#if this is the first measure dans there's no bpm
 		if bpm is None and self.id == 1:

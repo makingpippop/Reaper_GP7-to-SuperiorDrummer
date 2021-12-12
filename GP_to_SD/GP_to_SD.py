@@ -1,7 +1,7 @@
 from musicxml.obj.score import Score
 
 from .group import Group
-from .config import GROUPS as instrument_group_config
+from .Config.config import GROUPS as instrument_group_config
 
 class GP_to_SD3(object):
     def __init__(self, score_obj:Score) -> None:
