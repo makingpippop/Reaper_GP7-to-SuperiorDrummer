@@ -37,7 +37,9 @@ class Note(Beat):
 		last_beats = args[2]
 		last_beat 	= last_beats['any']
 		#dynamic
+		#TODO: TEMPORARY FIX -> GP8 changed their XML structure, and now the dynamic is not linked to note...
 		n_dynamic 			= self.load_note_dynamic()
+		n_dynamic 			= "f" #<-- this is a temporary fix
 		#TODO: If the first note has no dynamic set in GP, this next line will nor work
 		n_dynamic 			= last_beat.dynamic if n_dynamic == None else n_dynamic
 		self.dynamic 		= n_dynamic

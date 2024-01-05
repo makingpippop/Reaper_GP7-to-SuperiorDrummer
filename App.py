@@ -19,8 +19,8 @@ from helpers.musicxml import link_MIDI_to_notation
 loggername 	= __name__ if __name__ != "__main__" else 'REAPER_GP7-to-SD3'
 LOGGER 		= TheLogger(loggername, file='INFO', stream='INFO')
 
-FILE_PATH  		= "D:/Cydemind/Symphony-x/Accolade-1"
-FILENAME 		= "Symphony-X-V3_Accolade1"
+FILE_PATH  		= "D:/Cydemind/Symphony-x/Communion-and-the-oracle"
+FILENAME 		= "Symphony-X-V3_Comm-and-the-oracle"
 DRUM_PART_ID 	= 1
 """
 TO DO 
