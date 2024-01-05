@@ -9,6 +9,7 @@
             "name": "Python: App.py",
             "type": "python",
             "request": "launch",
+            "envFile": "${workspaceFolder}/.venv",
             "program": "App.py", //${file}
             "console": "integratedTerminal"
         }

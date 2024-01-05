@@ -14,7 +14,7 @@ def get_nested_tracks(project:R_project, track:R_track) -> R_tracks:
 
 		for track_id in range(last_track_id, new_track_id+1, -1):
 			track = project.tracks[track_id-1]
-			if new_track_id == track.parent_track.index :
+			if track.parent_track and new_track_id == track.parent_track.index :
 				child_tracks.insert(0,track)
 	return child_tracks
 
@@ -58,5 +58,5 @@ def glue_all_items_on_track(project:R_project, track:R_track) -> None:
 			make_unique = i == 0
 			project.select_item(item, makeUnique=make_unique)
 		#glue items
-		project.perform_action(42432)
+		project.perform_action(40362)
 

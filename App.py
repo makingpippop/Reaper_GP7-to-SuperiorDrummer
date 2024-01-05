@@ -1,5 +1,11 @@
 import os
 from sys import path as PYTHONPATH
+#Add this package to the list of python package -------------
+currentdir = os.path.dirname(os.path.realpath(__file__))
+PYTHONPATH.append(currentdir)
+print(PYTHONPATH)
+#------------------------------------------------------------
+
 import reapy
 from reapy import prevent_ui_refresh
 #local imports
@@ -8,18 +14,26 @@ from musicxml import MusicXML
 from GP_to_SD import GP_to_SD3
 from helpers.reaper import get_nested_tracks, get_track_by_CC_pitch, combine_items_from_track_group, glue_all_items_on_track
 from helpers.musicxml import link_MIDI_to_notation
-#Add this package to the list of python package -------------
-currentdir = os.path.dirname(os.path.realpath(__file__))
-PYTHONPATH.append(currentdir)
-#------------------------------------------------------------
 #from itertools import chain
 
 loggername 	= __name__ if __name__ != "__main__" else 'REAPER_GP7-to-SD3'
 LOGGER 		= TheLogger(loggername, file='INFO', stream='INFO')
 
-FILE_PATH  		= "G:/Shared drives/_Cydemind/Recordings/The-descent/SD3/05_Hemlock/Assets/MIDI/A"
-FILENAME 		= "05_Hemlock_v3_Part-A"
+FILE_PATH  		= "D:/Cydemind/Symphony-x/Accolade-1"
+FILENAME 		= "Symphony-X-V3_Accolade1"
 DRUM_PART_ID 	= 1
+"""
+TO DO 
+- MULTITHREAD (subprocess? -> review notes)
+- CHOOSING THE GROUP TO IMPORT
+- CHOOSING THE TRACK TO IMPORT
+- CHOOSING A RANGE TO IMPORT
+- DELETE REAPER MIDI WHEN SAME INSTRUMENT IS ON DIFFERENT LAYER IN GP (or error check before applying)
+- TEXTO WHEN CRASHED
+- REMOVE SELECTION IN REAPER BEFORE STARTING!!! (cause crash)
+- REPLACE 'EXPLODE' WITH CUSTOM SCRIPT (caused error with COTV)
+- fix number of notes error when grace note (before beat) on first note of measure
+"""
 
 def import_drums():
 	##################################################
@@ -76,8 +90,12 @@ def import_drums():
 	project.cursor_position = 0
 	#import MIDI file
 	print(project.__dict__)
+
+
+	
 	midi_item = project.import_media(f'{FILE_PATH}/{FILENAME}.mid')
 	midi_track = midi_item.track
+
 	#Add SD3 to the track's FX
 	#midi_track.add_fx("Superior Drummer 3 (Toontrack) (32 out)")
 	
@@ -86,11 +104,31 @@ def import_drums():
 	print('Creating new tracks by MIDI pitch')
 	#explode action (to seperate the imported midi into multiple tracks by pitch) ID 40920
 	project.perform_action(40920)
+	
+
 
 	#get child tracks ----------------------------------------------------------
-	child_tracks = get_nested_tracks(project, midi_track)
 	
+	# pitch_dict = {}
+	# child_tracks = []
+	# with reapy.inside_reaper():
+	# 	for n in midi_track.items[0].takes[0].notes:
+	# 		n_pitch = n.pitch
+	# 		if str(n_pitch) not in pitch_dict:
+	# 			pitch_dict[str(n_pitch)] = []
+	# 			new_track = project.add_track(0, str(n_pitch))
+	# 			child_tracks.append(new_track)
+
+
+	# 		pitch_dict[str(n_pitch)].append(n)
+
+	# 	for p in pitch_dict.keys():
+	# 		print(p)
+
+	#TEMPORARY FOR COTV
+	#midi_track = project.tracks[0]
 	#---------------------------------------------------------------------------
+	child_tracks = get_nested_tracks(project, midi_track)
 	#COMBINE MIDI FILES
 	main_tracks = []
 	ununsed_tracks = []
@@ -130,9 +168,19 @@ def import_drums():
 			print('\tDone!')
 			#get associated group
 			g = inst_groups[t.name]
+			# if t.name == "Bass-drum":
+			# 	#print(t.items[0].takes[0].notes[0].measure_start)
+			# 	t_m_notes 	= t.items[0].takes[0].notes.in_measure(26)
+			# 	#sort the list using the absolute beat value
+			# 	t_m_notes.sort(key=lambda x: x.beat)
+			# 	print(len(t_m_notes), t_m_notes)
+			# 	return
+			# 	#notes_in_measures = len(t.items[0].takes[0].notes.in_measure(26))
+			# 	#print(notes_in_measures)
 			g.process(t, f'P{DRUM_PART_ID}')
 		project.end_undo_block()
-		
+	
+
 
 if __name__ == "__main__":
 	import_drums()
