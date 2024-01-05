@@ -38,6 +38,7 @@ class Note(Beat):
 		last_beat 	= last_beats['any']
 		#dynamic
 		n_dynamic 			= self.load_note_dynamic()
+		#TODO: If the first note has no dynamic set in GP, this next line will nor work
 		n_dynamic 			= last_beat.dynamic if n_dynamic == None else n_dynamic
 		self.dynamic 		= n_dynamic
 		#step and octave

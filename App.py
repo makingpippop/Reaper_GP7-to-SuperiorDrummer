@@ -1,12 +1,12 @@
 import os
 from sys import path as PYTHONPATH
-#Add this package to the list of python package -------------
-currentdir = os.path.dirname(os.path.realpath(__file__))
-PYTHONPATH.append(currentdir)
-print(PYTHONPATH)
-#------------------------------------------------------------
+# #Add this package to the list of python package -------------
+# currentdir = os.path.dirname(os.path.realpath(__file__))
+# PYTHONPATH.append(currentdir)
+# print(PYTHONPATH)
+# #------------------------------------------------------------
 
-import reapy
+from reapy import reapy
 from reapy import prevent_ui_refresh
 #local imports
 from the_logger import TheLogger
